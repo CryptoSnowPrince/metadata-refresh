@@ -8,8 +8,13 @@ const ADDRESS = process.env.ADDRESS
 const IDENTIFIER_START = process.env.IDENTIFIER_START
 const IDENTIFIER_END = process.env.IDENTIFIER_END
 const API_KEY = process.env.API_KEY
+const DELAY_PER_REQ = process.env.DELAY_PER_REQ
+const EPOCH_TIME = process.env.EPOCH_TIME
 
 sdk.auth(API_KEY);
+
+let success = 0
+let fail = 0
 
 function delayMs(ms) {
     return new Promise(resolve => {
@@ -23,14 +28,22 @@ async function refreshNftMetadata(chain, address, identifier_start, identifier_e
     for (let identifier = identifier_start; identifier <= identifier_end; identifier++) {
         console.log(`===refresh ${identifier} start===`)
         await sdk.refreshNftMetadata({ chain, address, identifier })
-            .then(({ data }) => console.log(data))
+            .then(({ data }) => {
+                success++
+                console.log(data)
+                console.log('success: ', success)
+            })
             .catch(err => {
-                console.log(err?.data?.errors)
+                fail++
+                console.log(err?.data)
                 // console.error(err)
+                console.log('fail: ', fail)
             });
-        await delayMs(100)
+        await delayMs(DELAY_PER_REQ)
         console.log(`===refresh ${identifier} end===`)
     }
+    console.log(`===refresh success=${success}===`)
+    console.log(`===refresh fail=${fail}===`)
     console.log('===refresh end===')
 }
 
@@ -38,7 +51,7 @@ async function refreshNftMetadata(chain, address, identifier_start, identifier_e
 async function main() {
     try {
         console.log("==refreshNftMetadata setInterval==");
-        setInterval(async () => { await refreshNftMetadata(CHAIN, ADDRESS, IDENTIFIER_START, IDENTIFIER_END) }, 10_000_000);
+        setInterval(async () => { await refreshNftMetadata(CHAIN, ADDRESS, IDENTIFIER_START, IDENTIFIER_END) }, EPOCH_TIME);
         console.log("==refreshNftMetadata epoch==");
         await refreshNftMetadata(CHAIN, ADDRESS, IDENTIFIER_START, IDENTIFIER_END)
     } catch (error) {
