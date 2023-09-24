@@ -28,7 +28,7 @@ async function refreshNftMetadata(chain, address, identifier_start, identifier_e
                 console.log(err?.data?.errors)
                 // console.error(err)
             });
-        await delayMs(1000)
+        await delayMs(100)
         console.log(`===refresh ${identifier} end===`)
     }
     console.log('===refresh end===')

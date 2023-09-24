@@ -1,7 +1,11 @@
 {
   "name": "opensea-metadata-refresh",
+  "version": "1.0.0",
+  "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "start-bot": "pm2 start index.js --name open-nft-metadata-refresh",
+    "stop-bot": "pm2 stop index.js"
   },
   "dependencies": {
     "api": "^6.1.1",
