@@ -1,0 +1,10 @@
+{
+  "name": "opensea-metadata-refresh",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "api": "^6.1.1",
+    "dotenv": "^16.3.1"
+  }
+}
